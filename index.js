@@ -1,22 +1,29 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+// import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import appHello from './appHello.js';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
+// Basic Home Endpoint
+app.get('/', (_req, res) => {
+  appHello();
+  res.send('Hello World');
+});
+
+// Email Sending Endpoint
 app.post('/send-email', (req, res) => {
   console.log(req.body);
   const { name, email, message } = req.body;
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
@@ -33,12 +40,6 @@ app.post('/send-email', (req, res) => {
     }
     res.status(200).send('Email sent successfully');
   });
-});
-
-// Basic Home Endpoint
-app.get('/', (req, res) => {
-  console.log('Hello World');
-  res.send('Hello World');
 });
 
 app.listen(3010, () => console.log('Server running on port 3010'));
