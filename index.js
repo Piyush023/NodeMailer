@@ -4,12 +4,15 @@ import cors from 'cors';
 // import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import appHello from './appHello.js';
+import data from './data.json' with { type: 'json' };
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+console.log(JSON.stringify(data));
 
 // Basic Home Endpoint
 app.get('/', (_req, res) => {
